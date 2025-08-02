@@ -5,14 +5,7 @@ import {
 } from '@tanstack/react-query';
 import { fetchNoteById } from '@/lib/api';
 import TanStackProvider from '@/components/TanStackProvider/TanStackProvider';
-import NoteDetailsClient from '../NoteDetails.client';
-
-// interface NoteDetailsPageProps {
-//   params: { id: string };
-// }
-// type Params = {
-//   id: string;
-// };
+import NoteDetailsClient from './NoteDetails.client';
 
 type Props = {
   params: { id: string };
