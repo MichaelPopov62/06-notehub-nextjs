@@ -11,7 +11,7 @@ interface ErrorProps {
   reset: () => void;
 }
 
-export default function NotesError({ error, reset }: ErrorProps) {
+export default function NotesListError({ error, reset }: ErrorProps) {
   return (
     <div>
       <p>Could not fetch the list of notes. {error.message}</p>
