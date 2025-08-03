@@ -1,7 +1,7 @@
-/*Компонент для відображення деталей нотатки з використанням SSR
-Здійснює попереднє завантаження даних
-Гідратацію кешу
- Передачу данних клієнтському компоненту NoteDetailsClient.*/
+// // /*Компонент для відображення деталей нотатки з використанням SSR
+// // Здійснює попереднє завантаження даних
+// // Гідратацію кешу
+// //  Передачу данних клієнтському компоненту NoteDetailsClient.*/
 
 import {
   QueryClient,
@@ -11,11 +11,11 @@ import {
 import { fetchNoteById } from '@/lib/api';
 import NoteDetailsClient from './NoteDetails.client';
 
-export default async function NoteDetailsPage({
-  params,
-}: {
+type Props = {
   params: Promise<{ id: string }>;
-}) {
+};
+
+export default async function NoteDetailsPage({ params }: Props) {
   const { id } = await params;
 
   const queryClient = new QueryClient();

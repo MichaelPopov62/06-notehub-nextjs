@@ -8,7 +8,7 @@ import type { Note } from '../types/note';
 import type { AxiosError } from 'axios';
 
 // Токен авторизації
-const VITE_NOTEHUB_TOKEN = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
+const NEXT_PUBLIC_NOTEHUB_TOKEN = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 // Базова URL-адреса бекенду
 const BASE_URL = 'https://notehub-public.goit.study/api';
 
@@ -46,7 +46,7 @@ export async function fetchNotes({
       ...(search.trim() !== '' ? { search } : {}),
     },
     headers: {
-      Authorization: `Bearer ${VITE_NOTEHUB_TOKEN}`,
+      Authorization: `Bearer ${NEXT_PUBLIC_NOTEHUB_TOKEN}`,
     },
   });
 
@@ -66,14 +66,15 @@ export async function fetchNotes({
   };
 }
 
-// Функція отримання однієї нотатки за ID (максимально просто та близько до твого стилю)
 export async function fetchNoteById(id: string): Promise<Note> {
+  // console.log('Token:', NEXT_PUBLIC_NOTEHUB_TOKEN);
   try {
     const response = await axios.get<Note>(`${BASE_URL}/notes/${id}`, {
       headers: {
-        Authorization: `Bearer ${VITE_NOTEHUB_TOKEN}`,
+        Authorization: `Bearer ${NEXT_PUBLIC_NOTEHUB_TOKEN}`,
       },
     });
+    // console.log(response.data);
 
     return response.data;
   } catch (error) {
@@ -96,7 +97,7 @@ export async function fetchNoteById(id: string): Promise<Note> {
 export async function createNote(newNote: DataNewNotes): Promise<Note> {
   const response = await axios.post<Note>(`${BASE_URL}/notes`, newNote, {
     headers: {
-      Authorization: `Bearer ${VITE_NOTEHUB_TOKEN}`,
+      Authorization: `Bearer ${NEXT_PUBLIC_NOTEHUB_TOKEN}`,
     },
   });
   return response.data;
@@ -107,7 +108,7 @@ export async function deleteNote(id: string): Promise<Note> {
   // Відправляю DELETE-запит з ID нотатки та токеном авторизації
   const response = await axios.delete<Note>(`${BASE_URL}/notes/${id}`, {
     headers: {
-      Authorization: `Bearer ${VITE_NOTEHUB_TOKEN}`,
+      Authorization: `Bearer ${NEXT_PUBLIC_NOTEHUB_TOKEN}`,
     },
   });
   return response.data;
