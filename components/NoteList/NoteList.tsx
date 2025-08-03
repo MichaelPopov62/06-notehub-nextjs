@@ -1,3 +1,6 @@
+/*Компонент який показує список нотаток і дозволяє видаляти кожну з них.
+Після видалення кеш оновлюється, щоб показати актуальні дані.*/
+
 import { useState } from 'react';
 import type { Note } from '../../types/note';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -8,7 +11,6 @@ import Link from 'next/link';
 // Типи пропсів
 interface NoteListProps {
   notes: Note[]; // список нотатків
-  // currentPage: number; //поточний стан
 }
 
 export default function NoteList({ notes }: NoteListProps) {
@@ -20,7 +22,7 @@ export default function NoteList({ notes }: NoteListProps) {
   const deleteMutation = useMutation({
     mutationFn: (id: string) => deleteNote(id),
     onSuccess: (data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['notes'] });
+      queryClient.invalidateQueries({ queryKey: ['notes'] }); // оновленя кешу
       setErrorMessage(null);
       setSuccessMessage(`Note ${variables} successfully deleted`);
       // додаю прибирання повідомлення через 3 секунди

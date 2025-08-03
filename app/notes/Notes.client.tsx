@@ -1,46 +1,47 @@
-/*Це клієнтський компонент, який реалізує повну логіку для сторінки /notes, зокрема:
-Пошук
-Пагінацію
-Отримання данних
-Лоадер
-Обробляє помилки запиту
-Відображає нотаток
-Повідомляє про відсутність результату
-Створення нототка через модалку
-Закриття модалки через ESC
-*/
+// /*Це клієнтський компонент, який реалізує повну логіку для сторінки /notes, зокрема:
+// Пошук
+// Пагінацію
+// Отримання данних
+// Лоадер
+// Обробляє помилки запиту
+// Відображає нотаток
+// Повідомляє про відсутність результату
+// Створення нототка через модалку
+// Закриття модалки через ESC
+// */
 
 'use client';
 
-import css from '../notes/page.module.css';
 import { useState, useEffect } from 'react';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { useDebouncedCallback } from 'use-debounce';
-import NoteForm from '../../components/NoteForm/NoteForm';
-import NoteList from '../../components/NoteList/NoteList';
-import SearchBox from '../../components/SearchBox/SearchBox';
-import Modal from '../../components/Modal/Modal';
-import Pagination from '../../components/Pagination/Pagination';
-import Loader from '../../components/Loader/Loader';
-import { fetchNotes } from '../../lib/api';
-import type { FetchNotesResponse } from '../../lib/api';
+import { fetchNotes, type FetchNotesResponse } from '@/lib/api';
+import NoteForm from '@/components/NoteForm/NoteForm';
+import NoteList from '@/components/NoteList/NoteList';
+import SearchBox from '@/components/SearchBox/SearchBox';
+import Modal from '@/components/Modal/Modal';
+import Pagination from '@/components/Pagination/Pagination';
+import Loader from '@/components/Loader/Loader';
+import css from './page.module.css';
 
 const PER_PAGE = 10;
 const MIN_LOADING_TIME = 100;
 
-export default function App() {
+interface NotesClientProps {
+  initialNotes: FetchNotesResponse;
+}
+
+export default function Notes({ initialNotes }: NotesClientProps) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState(''); // debounce-значення
+  const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showLoader, setShowLoader] = useState(true);
 
-  // debounce-пошук
   const updateSearchQuery = useDebouncedCallback((newSearchQuery: string) => {
     setSearchQuery(newSearchQuery);
     setCurrentPage(1);
   }, 300);
 
-  // Запит нотаток
   const { data, isLoading, isError, isSuccess } = useQuery<
     FetchNotesResponse,
     Error
@@ -54,9 +55,10 @@ export default function App() {
       }),
     placeholderData: keepPreviousData,
     staleTime: 1000 * 60,
+    initialData:
+      currentPage === 1 && searchQuery === '' ? initialNotes : undefined,
   });
 
-  // Плавний лоадер
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>;
 
@@ -69,14 +71,10 @@ export default function App() {
     return () => clearTimeout(timeoutId);
   }, [isLoading]);
 
-  const handlePageChange = (selected: number) => {
-    setCurrentPage(selected);
-  };
-
+  const handlePageChange = (selected: number) => setCurrentPage(selected);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  // Escape для модалки
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') closeModal();
@@ -108,10 +106,8 @@ export default function App() {
       </header>
 
       <>
-        {/* Лоадер */}
         {showLoader && <Loader message="Interesting notes...." />}
 
-        {/* Помилка */}
         {!showLoader && isError && (
           <Loader
             message="There was a pardon for the enchanted notes"
@@ -119,12 +115,10 @@ export default function App() {
           />
         )}
 
-        {/* Є нотатки */}
         {!showLoader && isSuccess && data?.notes.length > 0 && (
           <NoteList notes={data.notes} />
         )}
 
-        {/* Пошук не дав результатів */}
         {!showLoader &&
           isSuccess &&
           data?.notes.length === 0 &&
@@ -133,7 +127,6 @@ export default function App() {
           )}
       </>
 
-      {/* Модалка */}
       {isModalOpen && (
         <Modal onClose={closeModal}>
           <NoteForm onClose={closeModal} />

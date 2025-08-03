@@ -3,9 +3,9 @@ import css from './Loader.module.css';
 
 interface LoaderProps {
   message?: string;
-  size?: number; // додатково можна передавати розмір
-  color?: string; // додатково можна передавати колір
-  speedMultiplier?: number; //додатково контролює швидкість анімації.
+  size?: number;
+  color?: string;
+  speedMultiplier?: number;
 }
 
 export default function Loader({

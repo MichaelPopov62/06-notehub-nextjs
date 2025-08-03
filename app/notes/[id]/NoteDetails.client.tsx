@@ -1,21 +1,21 @@
 /*Компонент: Клієнтський ('use client'.Працює в парі з SSR-компонентом page.tsx
-Що робить: Отримання ID з URL
-Запит даних
-Показує стан завантаження через лоадинг
-Стан помилки
-Відображає деталі нотатки*/
+ Що робить: Отримання ID з URL
+ Запит даних
+ Показує стан завантаження через лоадинг
+ Стан помилки
+ Відображає деталі нотатки*/
 
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
 import { fetchNoteById } from '@/lib/api';
 import { useParams } from 'next/navigation';
-import css from './NoteDetailsClient.module.css'; // припустимо, що стилі тут
+import css from './NoteDetailsClient.module.css';
 
 export default function NoteDetailsClient() {
   const params = useParams();
 
-  // Якщо id у Note - число, конвертуємо рядок у число
+  // Якщо id - число, конвертуємо рядок у число
   const id = params.id ? Number(params.id) : null;
 
   const {
@@ -26,6 +26,7 @@ export default function NoteDetailsClient() {
     queryKey: ['note', id],
     queryFn: () => fetchNoteById(id?.toString() ?? ''),
     enabled: !!id,
+    refetchOnMount: false,
   });
 
   if (isLoading) return <p>Loading, please wait...</p>;
