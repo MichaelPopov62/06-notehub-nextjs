@@ -6,8 +6,8 @@
 // //  Відображає деталі нотатки*/
 
 'use client';
-// import { fetchNotes } from '@/lib/api';
-// import { useEffect } from 'react';
+import { fetchNotes } from '@/lib/api';
+import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import { fetchNoteById } from '@/lib/api';
@@ -20,7 +20,7 @@ export default function NoteDetailsClient() {
   const idNumber = id ? Number(id) : NaN;
   const isValidId = !isNaN(idNumber);
 
-  /* всі нотатки для перегляду id(перевіряю на викликах)- перевірка
+  //  всі нотатки для перегляду id(перевіряю на викликах)- перевірка
   useEffect(() => {
     async function showNotesList() {
       const { notes } = await fetchNotes();
@@ -30,7 +30,6 @@ export default function NoteDetailsClient() {
 
     showNotesList();
   }, []);
-  */
 
   const {
     data: note,
