@@ -3,9 +3,12 @@
 Гідратацію кешу
  Передачу данних клієнтському компоненту NoteDetailsClient.*/
 
-import { QueryClient, dehydrate } from '@tanstack/react-query';
+import {
+  QueryClient,
+  HydrationBoundary,
+  dehydrate,
+} from '@tanstack/react-query';
 import { fetchNoteById } from '@/lib/api';
-import TanstackProvider from '@/components/TanStackProvider/TanStackProvider';
 import NoteDetailsClient from './NoteDetails.client';
 
 export default async function NoteDetailsPage({
@@ -25,8 +28,8 @@ export default async function NoteDetailsPage({
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <TanstackProvider dehydratedState={dehydratedState}>
+    <HydrationBoundary state={dehydratedState}>
       <NoteDetailsClient />
-    </TanstackProvider>
+    </HydrationBoundary>
   );
 }
